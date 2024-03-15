@@ -47,11 +47,6 @@ style_mono_accent(
 
 ---
 
-## Corrections from the previous lecture
-
-
----
-
 ## Intended learning outcomes
 
 Motivate utilisation of path and CFA models; Argue how they connect to other models that we covered at the course. <br/><br/>
@@ -106,7 +101,7 @@ Model that test relationship between set of variables, often arranged in some so
 A common focus of the path model is the estimation of mediation between X and Y.
 
 .center[
-<img src="GeneralExample.png", width = "90%"> <br/>
+<img src="GeneralExample.png", width = "80%"> <br/>
 ]
 
 ???
@@ -209,18 +204,18 @@ Parameters can either be: free, fixed or constrained  <br/>
 
 ```{css, echo=FALSE}
 pre {
-  max-height: 300px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
 pre[class] {
-  max-height: 100px;
+  max-height: 80px;
 }
 ```
 
 ```{css, echo=FALSE}
 .scroll-100 {
-  max-height: 100px;
+  max-height: 80px;
   overflow-y: auto;
   background-color: inherit;
 }
@@ -362,11 +357,11 @@ Data: large samples, N:p rule - 20:1, more data usually better estimates. <br/>
 ---
 ## PiecewiseSEM
 .center[
-<img src="PiecewiseSEM.png", width = "60%"> 
+<img src="PiecewiseSEM.png", width = "50%"> 
 ]
 
 Variables are causally dependent if there is an arrow between them <br/>
-There are causally independent if there are no arrows between them <br/>
+They are causally independent if there are no arrows between them <br/>
 <br/>
 X1 is causally independent from Y2 _conditional_ on Y1
 
@@ -389,200 +384,9 @@ summary(model1, .progressBar=FALSE)
 
 ---
 
-class: inverse, middle, center
-# Practical aspect
----
-
-## Getting the data
-
-```{r}
-NBAPath<-read.table('NBApath.txt', sep='\t', header=T)
-```
----
-
-## What is in the data? 
-
-```{r}
-summary(NBAPath)
-```
-
----
-
-## Correlation matrix
-
-```{r}
-cor(NBAPath[,c(2,5:7)])
-```
-
----
-
-## Univariate plots
-
-```{r, fig.width=12, fig.height=5, fig.align='center'}
-par(mfrow=c(1,2), bty='n',mar = c(5, 4, .1, .1), cex=1.1, pch=16)
-plot(density(NBAPath$PER), main='')
-plot(density(NBAPath$PCT), main='')
-```
-
----
-
-## Bivariate plots
-
-```{r,fig.width=12, fig.height=5, fig.align='center'}
-par(mfrow=c(1,2), bty='n',mar = c(5, 4, .1, .1), cex=1.1, pch=16)
-plot(NBAPath$Age, NBAPath$PER)
-plot(NBAPath$GP, NBAPath$PER)
-```
-
----
-
-## Specification of the model 
-
-```{r, echo=FALSE, out.width = '70%',fig.align='center'}
-knitr::include_graphics("image8.png")
-```
-
-
----
-
-## Identification of the model
-
-What is the total number of parameters that we can estimate? <br/><br/><br/>
-What is the number of free parameters that our model is estimating? <br/><br/><br/>
-
-Is our model: <br/>
-a) under-identified <br/>
-b) just-identified <br/>
-c) over-identified<br/>
-
-Three path coefficients  <br/>
-Two error variances  <br/>
-One independent variable variance <br/><br/><br/>
-
-
-
-Just identified model<br/>
-
-???
-Total number of parameters that we can estimate: 3*4/2 = 6<br/>
-Number of free parameters: 1 variance, 2 errors, 3 regression pathways = 6 <br/>
-Just-identified model
----
-
-## Estimating the model
-
-```{r}
-NBAmod1<-'
-GP~b*Age
-PER~a*Age+c*GP
-
-dir := a
-ind := b*c
-tot := dir + ind
-'
-NBAfit1<-sem(NBAmod1, data=NBAPath)
-summary(NBAfit1)
-```
-
----
-
-## Explained variance - R2
-
-When just identified model, we cannot use global indices of model fit <br/>
-We need to use standard measures <br/>
-
-```{r}
-inspect(NBAfit1, 'r2')
--2*logLik(NBAfit1)
-AIC(NBAfit1)
-```
-
----
-
-## Respecification of the model 
-
-```{r, echo=FALSE, out.width = '70%',fig.align='center'}
-knitr::include_graphics("image9.png")
-```
-
-???
-```{r}
-NBAmod2<-'
-GP~b*Age
-PER~c*GP
-
-ind := b*c
-'
-NBAfit2<-sem(NBAmod2, data=NBAPath)
-summary(NBAfit2, fit.measures=T)
-```
-
----
-
-## Model comparison
-
-```{r, warning=FALSE, message=FALSE}
-#install.packages('semTools')
-require(semTools)
-diff<-compareFit(NBAfit1, NBAfit2)
-summary(diff)
-```
-
----
-
-## Respecification of the model 
-
-```{r, echo=FALSE, out.width = '70%',fig.align='center'}
-knitr::include_graphics("image10.png")
-```
-
-???
-
-```{r, warning=FALSE, message=FALSE}
-NBAmod3<-'
-GP~b*Age
-PER~a*Age+c*GP
-PCT~d*PER
-ind1 := b*c*d
-ind2 := a*d
-tot := ind1 + ind2
-'
-NBAfit3<-sem(NBAmod3, data=NBAPath)
-summary(NBAfit3, fit.measures=T)
-```
-
----
-
-## Parameter estimates
-
-```{r}
-parameterestimates(NBAfit3, boot.ci.type ='bca.simple', standardized = T)
-```
-
----
-
-## Bootstrapping our model
-
-```{r, message=FALSE, warning=FALSE}
-#install.packages('bootstrap')
-require(bootstrap)
-boot<-bootstrapLavaan(NBAfit3, R=1000)
-summary(boot)
-```
-
----
-
-## Model building
-
-.center[
-<img src="Loop.png", width = "50%">
-]
-
----
 ## Important aspects: theory
 
-- Difference between moderation, mediation and conditional process analysis <br/>
-- Exogenous and endogenous variables <br/>
+- Difference between moderation and mediation <br/>
 - Interpretation of the predictors <br/>
 - Calculation of free parameters and total parameters <br/>
 - Model identification: three-types of identifications <br/>
@@ -607,12 +411,6 @@ Introduction to Mediation, Moderation, and Conditional Process Analysis: A Regre
 
 Latent Variable Modeling Using R: A Step-by-Step Guide by A. Alexander Beaujean <br/><br/>
 
----
-## Exercises for the next week
-
-1. Fill the reflection and feedback form by Monday: https://forms.gle/ZNpui99GyYZbE4UZ7 <br/><br/>
-2. Go over practical aspects of the lecture; Try building path models in R <br/><br/>
-3. Think about what theory in psychology could you test using path modelling (regardless of you having the data). Think about how easy/difficult would be to defend the causal claims<br/><br/>
 ---
 
 # Thank you for your attention

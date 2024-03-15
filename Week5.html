@@ -4,7 +4,7 @@
     <title>Lecture 5: SEM (Path models)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Nemanja Vaci" />
-    <meta name="date" content="2024-03-08" />
+    <meta name="date" content="2024-03-14" />
     <script src="Week5_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -22,7 +22,7 @@ class: center, middle, inverse, title-slide
 ### University of Sheffield
 ]
 .date[
-### 2024-03-08
+### 2024-03-14
 ]
 
 ---
@@ -33,11 +33,6 @@ class: center, middle, inverse, title-slide
 
 
 ## Press record
-
----
-
-## Corrections from the previous lecture
-
 
 ---
 
@@ -95,7 +90,7 @@ Model that test relationship between set of variables, often arranged in some so
 A common focus of the path model is the estimation of mediation between X and Y.
 
 .center[
-&lt;img src="GeneralExample.png", width = "90%"&gt; &lt;br/&gt;
+&lt;img src="GeneralExample.png", width = "80%"&gt; &lt;br/&gt;
 ]
 
 ???
@@ -295,18 +290,18 @@ Parameters can either be: free, fixed or constrained  &lt;br/&gt;
 
 &lt;style type="text/css"&gt;
 pre {
-  max-height: 300px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
 pre[class] {
-  max-height: 100px;
+  max-height: 80px;
 }
 &lt;/style&gt;
 
 &lt;style type="text/css"&gt;
 .scroll-100 {
-  max-height: 100px;
+  max-height: 80px;
   overflow-y: auto;
   background-color: inherit;
 }
@@ -704,11 +699,11 @@ Data: large samples, N:p rule - 20:1, more data usually better estimates. &lt;br
 ---
 ## PiecewiseSEM
 .center[
-&lt;img src="PiecewiseSEM.png", width = "60%"&gt; 
+&lt;img src="PiecewiseSEM.png", width = "50%"&gt; 
 ]
 
 Variables are causally dependent if there is an arrow between them &lt;br/&gt;
-There are causally independent if there are no arrows between them &lt;br/&gt;
+They are causally independent if there are no arrows between them &lt;br/&gt;
 &lt;br/&gt;
 X1 is causally independent from Y2 _conditional_ on Y1
 
@@ -781,503 +776,9 @@ summary(model1, .progressBar=FALSE)
 
 ---
 
-class: inverse, middle, center
-# Practical aspect
----
-
-## Getting the data
-
-
-```r
-NBAPath&lt;-read.table('NBApath.txt', sep='\t', header=T)
-```
----
-
-## What is in the data? 
-
-
-```r
-summary(NBAPath)
-```
-
-```
-##      TEAM                PCT            Player              Pos           
-##  Length:3810        Min.   :0.1061   Length:3810        Length:3810       
-##  Class :character   1st Qu.:0.3780   Class :character   Class :character  
-##  Mode  :character   Median :0.5000   Mode  :character   Mode  :character  
-##                     Mean   :0.4905                                        
-##                     3rd Qu.:0.6098                                        
-##                     Max.   :0.8902                                        
-##       Age              GP             PER        
-##  Min.   :18.00   Min.   : 1.00   Min.   :-13.10  
-##  1st Qu.:23.00   1st Qu.:34.00   1st Qu.: 10.00  
-##  Median :25.00   Median :61.00   Median : 12.80  
-##  Mean   :26.05   Mean   :53.73   Mean   : 12.75  
-##  3rd Qu.:29.00   3rd Qu.:77.00   3rd Qu.: 15.80  
-##  Max.   :43.00   Max.   :82.00   Max.   : 35.20
-```
-
----
-
-## Correlation matrix
-
-
-```r
-cor(NBAPath[,c(2,5:7)])
-```
-
-```
-##            PCT        Age         GP        PER
-## PCT 1.00000000 0.14304325 0.08849459 0.07720633
-## Age 0.14304325 1.00000000 0.05170204 0.03598025
-## GP  0.08849459 0.05170204 1.00000000 0.45360129
-## PER 0.07720633 0.03598025 0.45360129 1.00000000
-```
-
----
-
-## Univariate plots
-
-
-```r
-par(mfrow=c(1,2), bty='n',mar = c(5, 4, .1, .1), cex=1.1, pch=16)
-plot(density(NBAPath$PER), main='')
-plot(density(NBAPath$PCT), main='')
-```
-
-&lt;img src="Week5_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Bivariate plots
-
-
-```r
-par(mfrow=c(1,2), bty='n',mar = c(5, 4, .1, .1), cex=1.1, pch=16)
-plot(NBAPath$Age, NBAPath$PER)
-plot(NBAPath$GP, NBAPath$PER)
-```
-
-&lt;img src="Week5_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Specification of the model 
-
-&lt;img src="image8.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-
----
-
-## Identification of the model
-
-What is the total number of parameters that we can estimate? &lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
-What is the number of free parameters that our model is estimating? &lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
-
-Is our model: &lt;br/&gt;
-a) under-identified &lt;br/&gt;
-b) just-identified &lt;br/&gt;
-c) over-identified&lt;br/&gt;
-
-Three path coefficients  &lt;br/&gt;
-Two error variances  &lt;br/&gt;
-One independent variable variance &lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
-
-
-
-Just identified model&lt;br/&gt;
-
-???
-Total number of parameters that we can estimate: 3*4/2 = 6&lt;br/&gt;
-Number of free parameters: 1 variance, 2 errors, 3 regression pathways = 6 &lt;br/&gt;
-Just-identified model
----
-
-## Estimating the model
-
-
-```r
-NBAmod1&lt;-'
-GP~b*Age
-PER~a*Age+c*GP
-
-dir := a
-ind := b*c
-tot := dir + ind
-'
-NBAfit1&lt;-sem(NBAmod1, data=NBAPath)
-summary(NBAfit1)
-```
-
-```
-## lavaan 0.6.15 ended normally after 10 iterations
-## 
-##   Estimator                                         ML
-##   Optimization method                           NLMINB
-##   Number of model parameters                         5
-## 
-##   Number of observations                          3810
-## 
-## Model Test User Model:
-##                                                       
-##   Test statistic                                 0.000
-##   Degrees of freedom                                 0
-## 
-## Parameter Estimates:
-## 
-##   Standard errors                             Standard
-##   Information                                 Expected
-##   Information saturated (h1) model          Structured
-## 
-## Regressions:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   GP ~                                                
-##     Age        (b)    0.315    0.098    3.196    0.001
-##   PER ~                                               
-##     Age        (a)    0.016    0.018    0.869    0.385
-##     GP         (c)    0.093    0.003   31.333    0.000
-## 
-## Variances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .GP              645.883   14.798   43.646    0.000
-##    .PER              21.834    0.500   43.646    0.000
-## 
-## Defined Parameters:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##     dir               0.016    0.018    0.869    0.385
-##     ind               0.029    0.009    3.179    0.001
-##     tot               0.045    0.020    2.222    0.026
-```
-
----
-
-## Explained variance - R2
-
-When just identified model, we cannot use global indices of model fit &lt;br/&gt;
-We need to use standard measures &lt;br/&gt;
-
-
-```r
-inspect(NBAfit1, 'r2')
-```
-
-```
-##    GP   PER 
-## 0.003 0.206
-```
-
-```r
--2*logLik(NBAfit1)
-```
-
-```
-## 'log Lik.' 58025.67 (df=5)
-```
-
-```r
-AIC(NBAfit1)
-```
-
-```
-## [1] 58035.67
-```
-
----
-
-## Respecification of the model 
-
-&lt;img src="image9.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-???
-
-```r
-NBAmod2&lt;-'
-GP~b*Age
-PER~c*GP
-
-ind := b*c
-'
-NBAfit2&lt;-sem(NBAmod2, data=NBAPath)
-summary(NBAfit2, fit.measures=T)
-```
-
-```
-## lavaan 0.6.15 ended normally after 10 iterations
-## 
-##   Estimator                                         ML
-##   Optimization method                           NLMINB
-##   Number of model parameters                         4
-## 
-##   Number of observations                          3810
-## 
-## Model Test User Model:
-##                                                       
-##   Test statistic                                 0.755
-##   Degrees of freedom                                 1
-##   P-value (Chi-square)                           0.385
-## 
-## Model Test Baseline Model:
-## 
-##   Test statistic                               888.633
-##   Degrees of freedom                                 3
-##   P-value                                        0.000
-## 
-## User Model versus Baseline Model:
-## 
-##   Comparative Fit Index (CFI)                    1.000
-##   Tucker-Lewis Index (TLI)                       1.001
-## 
-## Loglikelihood and Information Criteria:
-## 
-##   Loglikelihood user model (H0)             -29013.211
-##   Loglikelihood unrestricted model (H1)     -29012.833
-##                                                       
-##   Akaike (AIC)                               58034.422
-##   Bayesian (BIC)                             58059.403
-##   Sample-size adjusted Bayesian (SABIC)      58046.693
-## 
-## Root Mean Square Error of Approximation:
-## 
-##   RMSEA                                          0.000
-##   90 Percent confidence interval - lower         0.000
-##   90 Percent confidence interval - upper         0.041
-##   P-value H_0: RMSEA &lt;= 0.050                    0.987
-##   P-value H_0: RMSEA &gt;= 0.080                    0.000
-## 
-## Standardized Root Mean Square Residual:
-## 
-##   SRMR                                           0.005
-## 
-## Parameter Estimates:
-## 
-##   Standard errors                             Standard
-##   Information                                 Expected
-##   Information saturated (h1) model          Structured
-## 
-## Regressions:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   GP ~                                                
-##     Age        (b)    0.315    0.098    3.196    0.001
-##   PER ~                                               
-##     GP         (c)    0.093    0.003   31.417    0.000
-## 
-## Variances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .GP              645.883   14.798   43.646    0.000
-##    .PER              21.838    0.500   43.646    0.000
-## 
-## Defined Parameters:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##     ind               0.029    0.009    3.179    0.001
-```
-
----
-
-## Model comparison
-
-
-```r
-#install.packages('semTools')
-require(semTools)
-diff&lt;-compareFit(NBAfit1, NBAfit2)
-summary(diff)
-```
-
-```
-## ################### Nested Model Comparison #########################
-## 
-## Chi-Squared Difference Test
-## 
-##         Df   AIC   BIC Chisq Chisq diff RMSEA Df diff Pr(&gt;Chisq)
-## NBAfit1  0 58036 58067 0.000                                    
-## NBAfit2  1 58034 58059 0.755      0.755     0       1     0.3849
-## 
-## ####################### Model Fit Indices ###########################
-##         chisq df pvalue rmsea    cfi    tli  srmr        aic        bic
-## NBAfit1 .000†        NA .000† 1.000† 1.000  .000† 58035.667  58066.894 
-## NBAfit2 .755   1   .385 .000† 1.000† 1.001† .005  58034.422† 58059.403†
-## 
-## ################## Differences in Fit Indices #######################
-##                   df rmsea cfi   tli  srmr    aic   bic
-## NBAfit2 - NBAfit1  1     0   0 0.001 0.005 -1.245 -7.49
-```
-
----
-
-## Respecification of the model 
-
-&lt;img src="image10.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-???
-
-
-```r
-NBAmod3&lt;-'
-GP~b*Age
-PER~a*Age+c*GP
-PCT~d*PER
-ind1 := b*c*d
-ind2 := a*d
-tot := ind1 + ind2
-'
-NBAfit3&lt;-sem(NBAmod3, data=NBAPath)
-summary(NBAfit3, fit.measures=T)
-```
-
-```
-## lavaan 0.6.15 ended normally after 20 iterations
-## 
-##   Estimator                                         ML
-##   Optimization method                           NLMINB
-##   Number of model parameters                         7
-## 
-##   Number of observations                          3810
-## 
-## Model Test User Model:
-##                                                       
-##   Test statistic                                87.884
-##   Degrees of freedom                                 2
-##   P-value (Chi-square)                           0.000
-## 
-## Model Test Baseline Model:
-## 
-##   Test statistic                               999.296
-##   Degrees of freedom                                 6
-##   P-value                                        0.000
-## 
-## User Model versus Baseline Model:
-## 
-##   Comparative Fit Index (CFI)                    0.914
-##   Tucker-Lewis Index (TLI)                       0.741
-## 
-## Loglikelihood and Information Criteria:
-## 
-##   Loglikelihood user model (H0)             -27272.876
-##   Loglikelihood unrestricted model (H1)     -27228.934
-##                                                       
-##   Akaike (AIC)                               54559.752
-##   Bayesian (BIC)                             54603.469
-##   Sample-size adjusted Bayesian (SABIC)      54581.227
-## 
-## Root Mean Square Error of Approximation:
-## 
-##   RMSEA                                          0.106
-##   90 Percent confidence interval - lower         0.088
-##   90 Percent confidence interval - upper         0.126
-##   P-value H_0: RMSEA &lt;= 0.050                    0.000
-##   P-value H_0: RMSEA &gt;= 0.080                    0.990
-## 
-## Standardized Root Mean Square Residual:
-## 
-##   SRMR                                           0.047
-## 
-## Parameter Estimates:
-## 
-##   Standard errors                             Standard
-##   Information                                 Expected
-##   Information saturated (h1) model          Structured
-## 
-## Regressions:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   GP ~                                                
-##     Age        (b)    0.315    0.098    3.196    0.001
-##   PER ~                                               
-##     Age        (a)    0.016    0.018    0.869    0.385
-##     GP         (c)    0.093    0.003   31.333    0.000
-##   PCT ~                                               
-##     PER        (d)    0.002    0.000    4.780    0.000
-## 
-## Variances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .GP              645.883   14.798   43.646    0.000
-##    .PER              21.834    0.500   43.646    0.000
-##    .PCT               0.023    0.001   43.646    0.000
-## 
-## Defined Parameters:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##     ind1              0.000    0.000    2.647    0.008
-##     ind2              0.000    0.000    0.855    0.393
-##     tot               0.000    0.000    2.015    0.044
-```
-
----
-
-## Parameter estimates
-
-
-```r
-parameterestimates(NBAfit3, boot.ci.type ='bca.simple', standardized = T)
-```
-
-```
-##     lhs op       rhs label     est     se      z pvalue ci.lower ci.upper
-## 1    GP  ~       Age     b   0.315  0.098  3.196  0.001    0.122    0.507
-## 2   PER  ~       Age     a   0.016  0.018  0.869  0.385   -0.020    0.051
-## 3   PER  ~        GP     c   0.093  0.003 31.333  0.000    0.087    0.099
-## 4   PCT  ~       PER     d   0.002  0.000  4.780  0.000    0.001    0.003
-## 5    GP ~~        GP       645.883 14.798 43.646  0.000  616.879  674.887
-## 6   PER ~~       PER        21.834  0.500 43.646  0.000   20.853   22.814
-## 7   PCT ~~       PCT         0.023  0.001 43.646  0.000    0.022    0.025
-## 8   Age ~~       Age        17.498  0.000     NA     NA   17.498   17.498
-## 9  ind1 :=     b*c*d  ind1   0.000  0.000  2.647  0.008    0.000    0.000
-## 10 ind2 :=       a*d  ind2   0.000  0.000  0.855  0.393    0.000    0.000
-## 11  tot := ind1+ind2   tot   0.000  0.000  2.015  0.044    0.000    0.000
-##     std.lv std.all std.nox
-## 1    0.315   0.052   0.012
-## 2    0.016   0.013   0.003
-## 3    0.093   0.453   0.453
-## 4    0.002   0.077   0.077
-## 5  645.883   0.997   0.997
-## 6   21.834   0.794   0.794
-## 7    0.023   0.994   0.994
-## 8   17.498   1.000  17.498
-## 9    0.000   0.002   0.000
-## 10   0.000   0.001   0.000
-## 11   0.000   0.003   0.001
-```
-
----
-
-## Bootstrapping our model
-
-
-```r
-#install.packages('bootstrap')
-require(bootstrap)
-boot&lt;-bootstrapLavaan(NBAfit3, R=1000)
-summary(boot)
-```
-
-```
-##        b                a                   c                 d            
-##  Min.   :0.0123   Min.   :-0.042472   Min.   :0.07663   Min.   :0.0004267  
-##  1st Qu.:0.2538   1st Qu.: 0.004103   1st Qu.:0.09040   1st Qu.:0.0019577  
-##  Median :0.3171   Median : 0.016137   Median :0.09339   Median :0.0022663  
-##  Mean   :0.3188   Mean   : 0.015824   Mean   :0.09319   Mean   :0.0022812  
-##  3rd Qu.:0.3823   3rd Qu.: 0.027170   3rd Qu.:0.09579   3rd Qu.:0.0025987  
-##  Max.   :0.6498   Max.   : 0.074937   Max.   :0.10785   Max.   :0.0039386  
-##      GP~~GP         PER~~PER        PCT~~PCT      
-##  Min.   :614.3   Min.   :19.41   Min.   :0.02215  
-##  1st Qu.:637.7   1st Qu.:21.24   1st Qu.:0.02320  
-##  Median :644.2   Median :21.81   Median :0.02349  
-##  Mean   :645.2   Mean   :21.82   Mean   :0.02349  
-##  3rd Qu.:651.9   3rd Qu.:22.37   3rd Qu.:0.02377  
-##  Max.   :684.7   Max.   :25.02   Max.   :0.02488
-```
-
----
-
-## Model building
-
-.center[
-&lt;img src="Loop.png", width = "50%"&gt;
-]
-
----
 ## Important aspects: theory
 
-- Difference between moderation, mediation and conditional process analysis &lt;br/&gt;
-- Exogenous and endogenous variables &lt;br/&gt;
+- Difference between moderation and mediation &lt;br/&gt;
 - Interpretation of the predictors &lt;br/&gt;
 - Calculation of free parameters and total parameters &lt;br/&gt;
 - Model identification: three-types of identifications &lt;br/&gt;
@@ -1302,12 +803,6 @@ Introduction to Mediation, Moderation, and Conditional Process Analysis: A Regre
 
 Latent Variable Modeling Using R: A Step-by-Step Guide by A. Alexander Beaujean &lt;br/&gt;&lt;br/&gt;
 
----
-## Exercises for the next week
-
-1. Fill the reflection and feedback form by Monday: https://forms.gle/ZNpui99GyYZbE4UZ7 &lt;br/&gt;&lt;br/&gt;
-2. Go over practical aspects of the lecture; Try building path models in R &lt;br/&gt;&lt;br/&gt;
-3. Think about what theory in psychology could you test using path modelling (regardless of you having the data). Think about how easy/difficult would be to defend the causal claims&lt;br/&gt;&lt;br/&gt;
 ---
 
 # Thank you for your attention
