@@ -4,7 +4,7 @@
     <title>Lecture 5: SEM (Path models)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Nemanja Vaci" />
-    <meta name="date" content="2024-03-14" />
+    <meta name="date" content="2024-03-15" />
     <script src="Week5_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -22,7 +22,7 @@ class: center, middle, inverse, title-slide
 ### University of Sheffield
 ]
 .date[
-### 2024-03-14
+### 2024-03-15
 ]
 
 ---
@@ -618,7 +618,7 @@ The indirect effect of X on Y through M is a product of __a__ and __b__. The two
 ```r
 modelAbilityPath&lt;-'
 SocialBeh~Nutrition+a*PhyExer+GMA
-CognitiveAb~b*SocialBeh+c*Nutrition+GMA
+CognitiveAb~b*SocialBeh+c*PhyExer+GMA
 
 indirect := a*b
 direct := c
@@ -639,7 +639,7 @@ summary(fitPath)
 ## 
 ## Model Test User Model:
 ##                                                       
-##   Test statistic                               215.236
+##   Test statistic                                12.401
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           0.000
 ## 
@@ -650,26 +650,26 @@ summary(fitPath)
 ##   Information saturated (h1) model          Structured
 ## 
 ## Regressions:
-##                    Estimate    Std.Err   z-value  P(&gt;|z|)
-##   SocialBeh ~                                            
-##     Nutrition           0.030     1.105    0.027    0.978
-##     PhyExer    (a)      1.281     0.146    8.796    0.000
-##     GMA                -0.075     0.151   -0.500    0.617
-##   CognitiveAb ~                                          
-##     SocialBeh  (b)      9.579     0.469   20.428    0.000
-##     Nutrition  (c)      7.019     6.899    1.017    0.309
-##     GMA                 2.461     0.941    2.614    0.009
+##                    Estimate   Std.Err  z-value  P(&gt;|z|)
+##   SocialBeh ~                                          
+##     Nutrition          0.030    1.105    0.027    0.978
+##     PhyExer    (a)     1.281    0.146    8.796    0.000
+##     GMA               -0.075    0.151   -0.500    0.617
+##   CognitiveAb ~                                        
+##     SocialBeh  (b)     5.704    0.227   25.180    0.000
+##     PhyExer    (c)    11.355    0.439   25.846    0.000
+##     GMA                2.813    0.342    8.233    0.000
 ## 
 ## Variances:
-##                    Estimate    Std.Err   z-value  P(&gt;|z|)
-##    .SocialBeh        5515.809   780.053    7.071    0.000
-##    .CognitiveAb    215129.001 30423.835    7.071    0.000
+##                    Estimate   Std.Err  z-value  P(&gt;|z|)
+##    .SocialBeh       5515.809  780.053    7.071    0.000
+##    .CognitiveAb    28300.616 4002.312    7.071    0.000
 ## 
 ## Defined Parameters:
-##                    Estimate    Std.Err   z-value  P(&gt;|z|)
-##     indirect           12.275     1.519    8.079    0.000
-##     direct              7.019     6.899    1.017    0.309
-##     total              19.294     7.074    2.727    0.006
+##                    Estimate   Std.Err  z-value  P(&gt;|z|)
+##     indirect           7.308    0.880    8.304    0.000
+##     direct            11.355    0.439   25.846    0.000
+##     total             18.664    0.894   20.879    0.000
 ```
 ???
 Interaction between the predictors can be included similar to the linear regression model by using (:) sign.&lt;br/&gt; &lt;br/&gt;

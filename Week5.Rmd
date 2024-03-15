@@ -320,7 +320,7 @@ The indirect effect of X on Y through M is a product of __a__ and __b__. The two
 ```{r, warning=FALSE, message=FALSE}
 modelAbilityPath<-'
 SocialBeh~Nutrition+a*PhyExer+GMA
-CognitiveAb~b*SocialBeh+c*Nutrition+GMA
+CognitiveAb~b*SocialBeh+c*PhyExer+GMA
 
 indirect := a*b
 direct := c
